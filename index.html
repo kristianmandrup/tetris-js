@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>Tetris</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+</head>
+<body>
+	<div>
+		<canvas width="400" height="700"></canvas>
+	</div>
+	<div>
+		<h2>Score: <span id="score">0</span></h2>
+		<h2>Rows cleared: <span id="rows">0</span></h2>
+
+		<div id="gameOver">
+			<p>Game Over</p>
+			<button onclick="init()">Play Again</button>
+		</div>
+
+		<table>
+			<tr>
+				<td id="control">A</td>
+				<td>Move left</td>
+			</tr>
+			<tr>
+				<td id="control">D</td>
+				<td>Move right</td>
+			</tr>
+			<tr>
+				<td id="control">S</td>
+				<td>Move down</td>
+			</tr>
+			<tr>
+				<td id="control">Q</td>
+				<td>Rotate anticlockwise</td>
+			</tr>
+			<tr>
+				<td id="control">E</td>
+				<td>Rotate clockwise</td>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
