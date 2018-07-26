@@ -27,7 +27,9 @@ button{
 	height: 100%;
 	text-transform: uppercase;
 	font-family: 'Josefin Sans', sans-serif;
-	border: none;
+	border: 3px solid #FF4136;
+	border-radius: 10px;
+	padding-top: 6px;
 	background: none;
 	outline: none;
 	transition: all 0.3s;
