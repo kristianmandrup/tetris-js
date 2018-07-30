@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>Tetris</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 </head>
 <body>
 	<div>
@@ -16,31 +16,15 @@
 
 		<div id="gameOver">
 			<p>Game Over</p>
-			<button onclick="init()">Play Again</button>
+			<button>Play Again</button>
 		</div>
 
-		<table>
-			<tr>
-				<td id="control">A</td>
-				<td>Move left</td>
-			</tr>
-			<tr>
-				<td id="control">D</td>
-				<td>Move right</td>
-			</tr>
-			<tr>
-				<td id="control">S</td>
-				<td>Move down</td>
-			</tr>
-			<tr>
-				<td id="control">Q</td>
-				<td>Rotate anticlockwise</td>
-			</tr>
-			<tr>
-				<td id="control">E</td>
-				<td>Rotate clockwise</td>
-			</tr>
-		</table>
+		<ul>
+			<li><span>A</span> Left</li>
+			<li><span>D</span> Right</li>
+			<li><span>S</span> Down</li>
+			<li><span>E</span> Rotate</li>
+		</ul>
 	</div>
 	<script type="text/javascript" src="script.js"></script>
 </body>
