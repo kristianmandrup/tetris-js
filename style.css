@@ -1,11 +1,16 @@
 body{
-	width: 800px;
+	width: 900px;
 	margin: 0 auto;
-	font-family: 'Josefin Sans', sans-serif;
+	font-family: 'Montserrat', sans-serif;
+}
+
+canvas{
+	border: 2px solid #111111;
+	border-radius: 2px;
 }
 
 div{
-	width: 400px;
+	width: 450px;
 	float: left;
 	margin: 10px auto;
 }
@@ -15,21 +20,30 @@ h2{
 	font-size: 24px;
 }
 
-table{
-	margin: 300px auto 0px auto;
-	font-size: 18px;
-	border: 1px solid black;
-	border-collapse: collapse;
+ul{
+	margin-top: 70vh;
+}
+
+li{
+	font-size: 20px;
+	list-style: none;
+	display: inline;
+	padding: 4px;
+	border: 2px solid black;
+	border-radius: 10px;
+}
+
+li span{
+	font-size: 1.3em;
 }
 
 button{
 	font-size: 18px;
 	height: 100%;
 	text-transform: uppercase;
-	font-family: 'Josefin Sans', sans-serif;
-	border: 3px solid #FF4136;
+	font-family: inherit;
+	border: 2px solid #FF4136;
 	border-radius: 10px;
-	padding-top: 6px;
 	background: none;
 	outline: none;
 	transition: all 0.3s;
@@ -38,21 +52,12 @@ button{
 }
 
 button:hover{
-	color: #FF4136;
-}
-
-td{
-	padding: 5px;
-	border-right: 1px solid black;
+	background-color: #FF4136;
+	color: white;
 }
 
 #score, #rows{
 	font-size: 1.5em;
-}
-
-#control{
-	font-size: 1.2em;
-	text-align: center;
 }
 
 #gameOver{
