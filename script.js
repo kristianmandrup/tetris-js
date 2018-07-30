@@ -10,10 +10,10 @@ const boardWidth = canvas.width/scale;
 const boardHeight = canvas.height/scale;
 
 // piece colors
-var colors = [null, "#0074D9", "#7FDBFF", "#2ECC40", "#FFDC00","#FF4136", "#F012BE", "#FF851B"];
+let colors = ["#0074D9", "#7FDBFF", "#2ECC40", "#FFDC00","#FF4136", "#F012BE", "#FF851B"];
 
 // piece types
-var pieces = {
+let pieces = {
 	"I":[[0, 1, 0, 0],[0, 1, 0, 0],[0, 1, 0, 0],[0, 1, 0, 0]],
 	"J":[[0, 2, 0],[0, 2, 0],[2, 2, 0]],
 	"L":[[0, 3, 0],[0, 3, 0],[0, 3, 3]],
@@ -23,14 +23,15 @@ var pieces = {
 	"S":[[0, 0, 0],[0, 7, 7],[7, 7, 0]]
 }
 
-var prevTime = 0;
-var elapsed = 0;
-var score = 0;
-var rowsCleared = 0;
-var isGameOver = false;
+let prevTime = 0;
+let elapsed = 0;
 
-var player = newPlayer();
-var board = createBoard(boardHeight, boardWidth);
+let score;
+let rowsCleared;
+let isGameOver;
+
+let player;
+let board;
 
 /* initialize game */
 function init(){
@@ -63,17 +64,16 @@ function update(time){
 		scoreDisplay.innerText = score;
 		rowsDisplay.innerText = rowsCleared;
 		requestAnimationFrame(update);
+	} else {
+		gameOverDisplay.style.display = "block";
+		scoreDisplay.style.color = "#FF4136";
+		rowsDisplay.style.color = "#FF4136";
 	}
 }
 
 /* removes filled rows and updates score */
 function sweepBoard(){
-	let row = [];
 	let scoreMult = 4;
-
-	for(let x = 0; x < boardWidth; x++){
-		row.push(0);
-	}
 
 	for(let y = board.length - 1; y > 0; y--){
 		let sweepRow = true;
@@ -82,9 +82,10 @@ function sweepBoard(){
 				sweepRow = false;
 			}
 		}
+
 		if(sweepRow){
 			board.splice(y, 1); // delete row
-			board.unshift(row.slice()); // add new empty row at top
+			board.unshift(Array(boardWidth).fill(0)); // add new empty row at top
 			score += boardWidth * scoreMult;
 			scoreMult *= 4;
 			rowsCleared++;
@@ -94,7 +95,7 @@ function sweepBoard(){
 
 /* returns new game board */
 function createBoard(rows, cols){
-	var board = [], row = [];
+	let board = [], row = [];
 	while(cols--) row.push(0);
 	while(rows--) board.push(row.slice());
 	return board;
@@ -103,11 +104,7 @@ function createBoard(rows, cols){
 /* returns new player object with random piece type */
 function newPlayer(){
 	let pieceType = "IJLOZTS"[(Math.random()*7) | 0];
-	let player = {
-		matrix: pieces[pieceType],
-		pos: {x: boardWidth/2 - 1, y: 0}
-	}
-	return player;
+	return {matrix: pieces[pieceType], pos: {x: boardWidth/2 - 1, y: 0}};
 }
 
 /* clears canvas */
@@ -121,7 +118,7 @@ function draw(matrix, offsetX, offsetY){
 	matrix.forEach((row, y) => {
 		row.forEach((value, x) => {
 			if(value !== 0){
-				context.fillStyle = colors[value];
+				context.fillStyle = colors[value-1];
 				context.fillRect(x + offsetX, y + offsetY, 1, 1);
 			}
 		});
@@ -129,124 +126,91 @@ function draw(matrix, offsetX, offsetY){
 }
 
 /* rotates player piece */
-function rotatePlayer(dir){
+function rotatePlayer(){
 	// matrix transpose
-	for(let y = 0; y < player.matrix.length; y++){
-		for(let x = 0; x < y; x++){
+	for(let y = 0; y < player.matrix.length; y++)
+		for(let x = 0; x < y; x++)
 			[player.matrix[y][x], player.matrix[x][y]] = [player.matrix[x][y], player.matrix[y][x]];
-		}
-	}
 
 	// matrix reverse
-	if(dir > 0){
-		player.matrix.forEach(row => row.reverse());
-	} else {
-		player.matrix.reverse();
-	}
+	player.matrix.forEach(row => row.reverse());
 }
 
 /* moves player piece if valid */
 function movePlayer(key){
 	let newX = player.pos.x;
 	let newY = player.pos.y;
-
-	if(key === 65){
-		newX -= 1; // move left
-	} else if(key === 68){
-		newX += 1; // move right
-	} else if(key === 83){
-		newY += 1; // move down
-		elapsed = 0;
-		score += 1;
-	} else if(key === 81){
-		rotatePlayer(-1); // rotate ackwise
-	} else if(key === 69){
-		rotatePlayer(1); // rotate ckwise
+	
+	switch(key){
+		// move left
+		case 65: newX--; break;
+		// move right
+		case 68: newX++; break;
+		// move down
+		case 83:
+			newY++;
+			score++;
+			elapsed = 0;
+			break;
+		// rotate
+		case 69: rotatePlayer();
 	}
 
 	// prevent collision due to piece rotation
-	let offset = 0;
-	while(checkCollision(newX+offset, newY) === "left"){
-		offset++;
-		newY = player.pos.y;
-	}
-	while(checkCollision(newX+offset, newY) === "right"){
-		offset--;
-		newY = player.pos.y;
-	}
+	while(checkCollision(newX, newY) === "left") newX++;
+	while(checkCollision(newX, newY) === "right") newX--;
 
 	// prevent collision due to piece movement
-	let collision = checkCollision(newX, newY);
-	if(collision === "bottom"){
-		updateBoard();
-		player = newPlayer();
-		return;
-	} else if(collision === "top"){
-		// if piece collides with the top, game over
-		gameOverDisplay.style.display = "block";
-		scoreDisplay.style.color = "#FF4136";
-		rowsDisplay.style.color = "#FF4136";
-		isGameOver = true;
-		return;
+	switch(checkCollision(newX, newY)){
+		case "top": 
+			isGameOver = true; 
+			break;
+		case "bottom":
+			updateBoard();
+			player = newPlayer();
+			break;
+		default:
+			player.pos.x = newX;
+			player.pos.y = newY;
 	}
-	updatePlayer(newX + offset, newY);
 }
 
 /* adds current player piece to game board */
 function updateBoard(){
 	player.matrix.forEach((row, y) => {
 		row.forEach((value, x) => {
-			if(value !== 0){
-				board[y + player.pos.y][x + player.pos.x] = value;
-			}
+			if(value !== 0) board[y + player.pos.y][x + player.pos.x] = value;
 		});
 	});
 }
 
-/* updates player coordinates */
-function updatePlayer(newX, newY){
-	player.pos = {x: newX, y: newY};
-}
-
 /* returns true if player piece touches another piece */
-function touchedPiece(value, x, y){
-	return value !== 0 && y < boardHeight && x < boardWidth && 
+function touchedPiece(x, y){
+	return y < boardHeight && x < boardWidth && 
 	y >= 0 && x >=0 && board[y][x] !== 0;
 }
 
 /* returns direction of collision, else returns empty string */
 function checkCollision(newX, newY){
-	let dir = "";
-	player.matrix.forEach((row, y) => {
-		row.forEach((value, x) => {
-			if(value !== 0){
-				
-				// left collision
-				if(x + newX < 0){
-					dir = "left";
-				}
-				// right collision
-				else if(x + newX > boardWidth - 1){
-					dir = "right";
-				}
-				// bottom collision
-				else if(y + newY > boardHeight - 1 || touchedPiece(value, x + newX, y + newY)){
-					dir = "bottom";
-					// if bottom and top collided
-					if(newY <= 1){
-						dir = "top";
-					}
-				}
-			}
-		});
-	});
+	for(let y = 0; y < player.matrix.length; y++){
+		for(let x = 0; x < player.matrix.length; x++){
+			if(player.matrix[y][x] !== 0){
 
-	return dir;
+				if(newY <= 1 && touchedPiece(x + newX, y + newY)) return "top";
+				else if(x + newX < 0) return "left";
+				else if(x + newX > boardWidth - 1) return "right";
+				else if(y + newY > boardHeight - 1 || 
+					touchedPiece(x + newX, y + newY)) return "bottom";
+			}
+		}
+	}
 }
 
 document.addEventListener("keydown", event => {
 	movePlayer(event.which);
 });
+
+document.querySelector("button").addEventListener("click", init);
 
 context.scale(scale, scale);
 init();
