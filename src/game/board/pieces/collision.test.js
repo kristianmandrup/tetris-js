@@ -10,6 +10,8 @@ describe("collision", () => {
   };
 
   const checkCollision = createCheckCollision(game);
+  const newX = 1;
+  const newY = 1;
 
   checkCollision(newX, newY);
 });

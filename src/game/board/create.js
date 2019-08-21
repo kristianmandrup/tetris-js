@@ -1,9 +1,10 @@
 /* returns new game board */
-function createBoard(rows, cols) {
-  let plane = [],
-    row = [];
+function createEmptyBoard(rows, cols) {
+  let plane = [];
+  let row = [];
   while (cols--) row.push(0);
   while (rows--) plane.push(row.slice());
+
   return {
     plane,
     rows,
@@ -11,4 +12,4 @@ function createBoard(rows, cols) {
   };
 }
 
-module.exports = createBoard;
+module.exports = createEmptyBoard;

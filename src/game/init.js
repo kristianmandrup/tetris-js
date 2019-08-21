@@ -5,7 +5,7 @@ const init = ({ factories, game }) => () => {
   const { width, height } = dimensions;
   const { createBoard, newPlayer } = factories;
 
-  board = createBoard(height, width);
+  board = createBoard(dimensions);
   player = newPlayer();
   score = 0;
   rowsCleared = 0;
