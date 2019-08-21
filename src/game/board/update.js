@@ -8,3 +8,5 @@ const updateBoard = game => () => {
     });
   });
 };
+
+module.exports = updateBoard;

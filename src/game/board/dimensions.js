@@ -1,4 +1,4 @@
-const screen = require("./screen");
+const screen = require("../screen/create");
 const scale = 25;
 
 const board = {
