@@ -1,13 +1,18 @@
 const screen = require("./screen");
-const colors = require("./colors");
-const pieces = require("./colors");
-const { boardWidth, boardHeight, scale } = require("./dimensions");
+const ui = require("./screen/ui")(screen);
+const game = require("./game");
+const player = require("./player");
+
+const { boardWidth, boardHeight, scale } = require("./board/dimensions");
+
+const { screen, findElement } = createScreen(document);
 
 document.addEventListener("keydown", event => {
   movePlayer(event.which);
 });
 
-document.querySelector("button").addEventListener("click", init);
+findElement("button").addEventListener("click", init);
 
-context.scale(scale, scale);
+screen.context.scale(scale, scale);
+
 init();

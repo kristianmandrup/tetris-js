@@ -1,4 +1,4 @@
-const playerController = game => {
+const createController = game => {
   /* moves player piece if valid */
   return {
     rotate: require("./rotate")(game),

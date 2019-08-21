@@ -15,4 +15,5 @@ const init = ({ factories, game }) => () => {
   rowsDisplay.style.color = "#0074D9";
   update(0);
 };
+
 module.exports = init;

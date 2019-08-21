@@ -8,7 +8,7 @@ let isGameOver;
 let player;
 let board;
 
-const game = {
+module.exports = {
   prevTime,
   elapsed,
   score,
@@ -17,5 +17,3 @@ const game = {
   player,
   board
 };
-
-module.exports = game;

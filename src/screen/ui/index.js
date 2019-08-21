@@ -1,4 +1,5 @@
-const ui = ({ context, canvas }) => {
+const ui = screen => {
+  const { context, canvas } = screen;
   const clearScreen = () => {
     context.fillStyle = "#111111";
     context.fillRect(0, 0, canvas.width, canvas.height);
